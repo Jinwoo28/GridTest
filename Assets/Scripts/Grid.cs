@@ -27,7 +27,7 @@ public class Grid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Input.mousePosition);
+        
     }
 
     public void CreateGrid()
@@ -54,14 +54,26 @@ public class Grid : MonoBehaviour
         return new Vector3(x, 0, z) * cellsize;
     }
 
-    public Node NodePoint(Vector3 rayPosition)
+    public Node NodePoint(Vector3 rayPosition, float cellsize)
     {
         //레이에 맞은 곳의 node를 찾아 반환하기 위한 함수
-        int x = (int)(rayPosition.x + width / 2);     //index번호가...?
-        int y = (int)(rayPosition.z + height / 2);
-        Debug.Log("X : " + x + " Y : " + y);
+        //int x = (int)(rayPosition.x-1);     //index번호가...?
+        //int y = (int)(rayPosition.z);
+        //Debug.Log("X : " + x + " Z : " + y);
 
-        return grid[x, y];
+        int x = (int)(rayPosition.x / cellsize);
+        int z = (int)(rayPosition.z / cellsize);
+
+      //  Debug.Log(x + " : " + z);
+
+        return grid[x, z];
+    }
+    
+    public Vector3 ReturnPos(Node node,float cellsize)
+    {
+        float X = node.GetX*cellsize;
+        float Z = node.GetY*cellsize;
+        return new Vector3(X, 0, Z);
     }
 
     public void ObstacleNode(Vector3 Obstacle)
@@ -148,7 +160,7 @@ public class Grid : MonoBehaviour
             GameObject obj = hit.collider.gameObject; //맞은 hit의 정보를 반환
                                                       //  Debug.Log(obj.name);
                                                       //  Debug.Log(obj.transform.position);
-            return Grid.gridinstance.NodePoint(obj.transform.position);  // 선택한 노드의 x,y 값으로 grid[x,y]를 찾음
+            return Grid.gridinstance.NodePoint(obj.transform.position,cellsize);  // 선택한 노드의 x,y 값으로 grid[x,y]를 찾음
         }
         return null; // 맞은 collider가 없으면 null 반환
     }
@@ -194,6 +206,14 @@ public class Grid : MonoBehaviour
                 node.ChangeNode = walkable;
             }
             yield return null;
+        }
+    }
+
+    public float Getcellsize
+    {
+        get
+        {
+            return cellsize;
         }
     }
 

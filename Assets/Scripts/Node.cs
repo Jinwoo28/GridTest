@@ -27,6 +27,33 @@ public class Node
         pos = pos_;
     }
 
+    public int GetX
+    {
+        get
+        {
+            return gridX;
+        }
+    }
+
+    public int GetY
+    {
+        get
+        {
+            return gridY;
+        }
+    }
+
+    public Vector3 GetPos
+    {
+        get
+        {
+            return new Vector3(GetX, 0, GetY);
+        }
+    }
+
+ 
+
+
     public int fCost
     {
         get

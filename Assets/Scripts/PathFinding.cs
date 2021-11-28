@@ -8,6 +8,10 @@ public class PathFinding : MonoBehaviour
     public Node start; //길찾기에서 시작이 될 노드
     public Node end;    //길찾기에서 끝이 될 노드
 
+    private float cellsize;
+
+    [SerializeField] GameObject TargetPos;
+
     //이 스크립트에서 start와 end가 다 정해져야 한다.
     // 받은 start와 end로 pathFinding이 이뤄져야 한다.
 
@@ -26,6 +30,11 @@ public class PathFinding : MonoBehaviour
     private void Awake()
     {
         Rb = GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        cellsize = Grid.gridinstance.Getcellsize;
     }
 
     private void Update()
@@ -79,8 +88,8 @@ public class PathFinding : MonoBehaviour
     }
     public Node CurrentPos()
     {
- 
-                return Grid.gridinstance.NodePoint(this.transform.position);
+        //Debug.Log(this.transform.position);
+                return Grid.gridinstance.NodePoint(this.transform.position,cellsize);
                 
     }
     // ================================================================
@@ -94,26 +103,45 @@ public class PathFinding : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             SetStartPos();
-            StopCoroutine("FindPath");
-            StopCoroutine("MoveUnit");
-            Node node = RayCast();
-            Node oldnode = end;
-            if (node != null)   //레이로 쏜 곳이 널이 아니고
-            {
-                if (end != null)    //이미 찍은 곳이 있을 때
-                {
-                    //end노드가 이미 있을 경우 초기화 후 end지점을 초기화
-                   
-                    end = null;
-                }
 
-                end = node;
+            //===========================================================
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 100f))
+            {
+                Vector3 hitPos = hit.point;
+                GameObject item = Instantiate(TargetPos);
+                item.transform.position = hitPos;
+               // Debug.Log(hitPos);
+
+             end= Grid.gridinstance.NodePoint(hitPos,cellsize);
+            }
+
+
+            //===========================================================
+
+            StopCoroutine("FindPath");
+           // StopCoroutine("MoveUnit");
+           // Node node = RayCast();
+            Node oldnode = end;
+            //if (node != null)   //레이로 쏜 곳이 널이 아니고
+            //{
+            //    if (end != null)    //이미 찍은 곳이 있을 때
+            //    {
+            //        //end노드가 이미 있을 경우 초기화 후 end지점을 초기화
+                   
+            //        end = null;
+            //    }
+
+            //    end = node;
                 
+
+         //   }
                 openSet.Clear();
                 closedSet.Clear();
                 FindPath();
-
-            }
         }
     }
     //=================================================================
@@ -129,7 +157,7 @@ public class PathFinding : MonoBehaviour
             GameObject obj = hit.collider.gameObject; //맞은 hit의 정보를 반환
                                                       //  Debug.Log(obj.name);
                                                       //  Debug.Log(obj.transform.position);
-            return Grid.gridinstance.NodePoint(Input.mousePosition);  // 선택한 노드의 x,y 값으로 grid[x,y]를 찾음
+            return Grid.gridinstance.NodePoint(Input.mousePosition,cellsize);  // 선택한 노드의 x,y 값으로 grid[x,y]를 찾음
         }
         return null; // 맞은 collider가 없으면 null 반환
     }
@@ -170,7 +198,7 @@ public class PathFinding : MonoBehaviour
             // 현재 노드가 목적지면 while문 탈출
             if (currentNode == end)
             {
-                pathSuccess = true;
+                //pathSuccess = true;
                 success = true;
                 break;
             }
@@ -216,10 +244,10 @@ public class PathFinding : MonoBehaviour
 
     IEnumerator MoveUnit()
     {
-        Debug.Log("sss");
+      //  Debug.Log("sss");
         if (success)
         {
-            Debug.Log("유닛 이동");
+           // Debug.Log("유닛 이동");
             Vector3[] Path = RetracePath(start, end);
 
 
@@ -229,7 +257,7 @@ public class PathFinding : MonoBehaviour
             {
                 if (targetIndex < Path.Length)
                 {
-                    Debug.Log("TargetIndex : " + targetIndex);
+                    //Debug.Log("TargetIndex : " + targetIndex);
                     currentWaypoint = Path[targetIndex];
 
                     float AxisX = currentWaypoint.x - transform.position.x;
@@ -238,18 +266,19 @@ public class PathFinding : MonoBehaviour
 
                     float SqrLen = Movedis.sqrMagnitude;
 
-                    if (/*transform.position.x == currentWaypoint.x && transform.position.z == currentWaypoint.z*/
-                        SqrLen < closeDistance * closeDistance)
+                    if (transform.position.x == currentWaypoint.x && transform.position.z == currentWaypoint.z)
+                        //SqrLen < closeDistance * closeDistance)
                     {
                         targetIndex++;
                     }
-                    currentWaypoint.y += 0.5f;
-                    Vector3 Dir = (currentWaypoint - this.transform.position).normalized;
-                    //                  this.transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+                    //currentWaypoint.y += 0.5f;
+                    //Vector3 Dir = (currentWaypoint - this.transform.position).normalized;
+                    ////  
+                    this.transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
 
-                    Rb.velocity = Dir * 200 * Time.deltaTime;
+                    //Rb.velocity = Dir * 200 * Time.deltaTime;
                     yield return null;
-                    Debug.Log("Path.Lengh : " + Path.Length);
+                   // Debug.Log("Path.Lengh : " + Path.Length);
                 }
                 else yield break;
                 Rb.velocity = Vector3.zero;
@@ -272,6 +301,7 @@ public class PathFinding : MonoBehaviour
         }
         Vector3[] waypoints = SimplifyPath(path);
         Array.Reverse(waypoints);
+        //Debug.Log(waypoints);
         return waypoints;
     }
 
@@ -290,7 +320,8 @@ public class PathFinding : MonoBehaviour
             }
             directionOld = directionNew;
         }
-        waypoints.Add(start.pos.position + Vector3.up * 0.1f);
+        waypoints.Add(start.GetPos + Vector3.up * 0.1f);
+        Debug.Log(waypoints[0]);
         return waypoints.ToArray();
     }
 
