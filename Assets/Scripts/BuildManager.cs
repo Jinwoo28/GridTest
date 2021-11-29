@@ -15,27 +15,16 @@ public class BuildManager : MonoBehaviour
 {
     [SerializeField] private Craft[] craft = null;  //직렬화를 통해 인스펙터창에서 관리하기 위한 변수
 
-    [SerializeField] private Camera _camera = null;
-
-//    [SerializeField] private GameObject BuildSlot = null;
-    private bool OpenBuildSlot = false;
-    [SerializeField] private Text[] ObstacleCount = null;
-
-    //[SerializeField] private GameObject Shop = null;
-    //[SerializeField] private GameObject[] ShopInUi = null;
-
-    //[SerializeField] private GameObject Player = null;
-    //[SerializeField] private GameObject[] Weapon = null;
-
     private GameObject PreviewPrefab = null;    //Craft를 담을 변수와 미리보기에 사용할 변수 선언
     private GameObject InsPrefab = null;    //생성할 건물
-    //private int BuildNum = 0;
 
     private bool isActivatePreview = false;
    private Vector3 MousePos;
     //
     private RaycastHit hitinfo;
     private Vector3 _location;
+
+    private Vector3 buildPos;
 
     private void Awake()
     {
@@ -44,40 +33,16 @@ public class BuildManager : MonoBehaviour
     }
     private void Update()
     {
-        MousePos = _camera.ScreenToWorldPoint(Input.mousePosition); //마우스의 현재 위치 받기
+        MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //마우스의 현재 위치 받기
 
         if (Input.GetKeyDown(KeyCode.R)) SlotClick(0);
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //{
-
-        //    //OpenBuildSlot = false;
-
-        //}
-
-
-        //================================================================= 1칸씩 움직이기
-        //if (isActivatePreview)
-        //{
-        //    if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hitinfo))
-        //    {
-        //        if (hitinfo.transform != null)
-        //        {
-        //            _location = hitinfo.point;
-        //            Debug.Log(hitinfo.point);
-        //            _location.y = 0.5f;
-        //            PreviewPrefab.transform.position = new Vector3((int)_location.x, 0.5f, (int)_location.z);
-        //        }
-        //    }
-        //}
-
-        //================================================================= 2칸씩 움직이기
 
         int X;
         int Z;
 
         if (isActivatePreview)
         {
-            if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hitinfo))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitinfo))
             {
                 if (hitinfo.transform != null)
                 {
@@ -92,52 +57,22 @@ public class BuildManager : MonoBehaviour
                     if ((int)_location.z % 2 == 0) Z = (int)_location.z;
                     else Z = (int)(_location.z) - 1;
 
-                    Debug.Log(X + " : " + Z);
-                    PreviewPrefab.transform.position = new Vector3(X, 0.5f, Z);
+                    //Debug.Log(X + " : " + Z);
+                    buildPos = new Vector3(X, 1.0f, Z);
+                    PreviewPrefab.transform.position = buildPos;
                 }
             }
         }
 
-        //// ================================================================= 3칸씩 움직이기
-        //int X;
-        //int Z;
-
-        //if (isActivatePreview)
-        //{
-        //    if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hitinfo))
-        //    {
-        //        if (hitinfo.transform != null)
-        //        {
-        //            _location = hitinfo.point;
-        //            _location.y = 0.5f;
-
-
-        //            if ((int)_location.x % 3 == 0) X = (int)_location.x;
-        //            else if((int)_location.x % 3 == 1) X = (int)(_location.x) - 1;
-        //            else X = (int)(_location.x) - 2;
-
-
-
-        //            if ((int)_location.z % 3 == 0) Z = (int)_location.z;
-        //            else if ((int)_location.z % 3 == 1) Z = (int)(_location.z) - 1;
-        //            else Z = (int)(_location.z) - 2;
-
-        //            Debug.Log(X + " : " + Z);
-        //            PreviewPrefab.transform.position = new Vector3(X, 0.5f, Z);
-        //        }
-        //    }
-        //}
-
-
-        //if (PreviewPrefab != null && PreviewPrefab.GetComponent<Preview>().isBuildable())
-        //{
-        //    if (Input.GetKeyDown(KeyCode.R))
-        //    {
-        //        Instantiate(InsPrefab, _location, Quaternion.identity);
-        //        Destroy(PreviewPrefab);
-        //        isActivatePreview = false;
-        //    }
-        //}
+        if (PreviewPrefab != null && PreviewPrefab.GetComponentInChildren<Preview>().isBuildable())
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Instantiate(InsPrefab, buildPos, Quaternion.identity);
+                Destroy(PreviewPrefab);
+                isActivatePreview = false;
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape) && PreviewPrefab != null)
         {
@@ -145,13 +80,8 @@ public class BuildManager : MonoBehaviour
             isActivatePreview = false;
            
         }
-
-
     }
 
-   
-
-    
 
     public void SlotClick(int _SlotNumber)
     {
@@ -163,19 +93,7 @@ public class BuildManager : MonoBehaviour
         //BuildNum = _SlotNumber;
     }
 
-    //public void BuildSlotOpen()
-    //{
-    //    if (OpenBuildSlot)
-    //    {
-    //        BuildSlot.SetActive(false);
-    //        OpenBuildSlot = false;
-    //    }
-    //    else if (!OpenBuildSlot)
-    //    {
-    //        BuildSlot.SetActive(true);
-    //        OpenBuildSlot = true;
-    //    }
-    //}
+  
 
   
 

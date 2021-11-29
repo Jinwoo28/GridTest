@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   craft:
   - craftname: "\uBC30\uB7ED"
-    previewCraft: {fileID: 4100961088057010896, guid: a77b802b9cfd4924ca7a817b6d38947c, type: 3}
+    previewCraft: {fileID: 3473963420741564195, guid: c6de9a6fb760e2947a88ee4e93463307, type: 3}
     BuildCraft: {fileID: 4100961088057010896, guid: 18391309e79c001418ee131ad3f47deb, type: 3}
   _camera: {fileID: 963194227}
   ObstacleCount: []
@@ -874,7 +874,7 @@ GameObject:
   - component: {fileID: 1966322492}
   - component: {fileID: 1966322491}
   - component: {fileID: 1966322490}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -972,6 +972,14 @@ PrefabInstance:
     - target: {fileID: 4100961088057010899, guid: 18391309e79c001418ee131ad3f47deb, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100961088057010899, guid: 18391309e79c001418ee131ad3f47deb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100961088057010899, guid: 18391309e79c001418ee131ad3f47deb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4100961088057010899, guid: 18391309e79c001418ee131ad3f47deb, type: 3}
       propertyPath: m_LocalPosition.x

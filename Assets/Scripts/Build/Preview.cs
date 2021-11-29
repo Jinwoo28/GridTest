@@ -17,7 +17,6 @@ public class Preview : MonoBehaviour
     {
     }
 
-    // Update is called once per frame
     void Update()
     {
         ChangeColor();
@@ -27,23 +26,30 @@ public class Preview : MonoBehaviour
     {
         if (colliderList.Count > 0) //충돌 물체가 하나 이상일 때 
         {
+        //Debug.Log("업데이트");
             SetColor(red);
         }
 
-        else { SetColor(green); }
+        else { SetColor(green); /*Debug.Log("업데이트22222")*/;
+        }
     }
 
     private void SetColor(Material mat)
     {
+        Debug.Log("0000");
         foreach (Transform thistransform in transform)
         {
+            Debug.Log("1111");
             var newMaterials = new Material[thistransform.GetComponent<Renderer>().materials.Length];
             for (int i = 0; i < newMaterials.Length; i++)
             {
+                Debug.Log("2222");
                 newMaterials[i] = mat;
             }
             thistransform.GetComponent<Renderer>().materials = newMaterials;
         }
+
+    
     }
 
     private void OnTriggerEnter(Collider other)
@@ -51,6 +57,7 @@ public class Preview : MonoBehaviour
         if (other.gameObject.layer != layerGround && other.gameObject.layer != IGNORE_LAYER)
         {
             colliderList.Add(other);
+            Debug.Log("충돌");
         }
 
     }
@@ -59,6 +66,7 @@ public class Preview : MonoBehaviour
         if (other.gameObject.layer != layerGround && other.gameObject.layer != IGNORE_LAYER)
         {
             colliderList.Remove(other);
+            Debug.Log("안충돌");
         }
     }
 
