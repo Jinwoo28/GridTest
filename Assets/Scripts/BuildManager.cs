@@ -35,7 +35,8 @@ public class BuildManager : MonoBehaviour
     {
         MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //마우스의 현재 위치 받기
 
-        if (Input.GetKeyDown(KeyCode.R)) SlotClick(0);
+        if (Input.GetKeyDown(KeyCode.R)) SlotClick(0,0);
+        if (Input.GetKeyDown(KeyCode.W)) SlotClick(1,-1);
 
         int X;
         int Z;
@@ -83,10 +84,11 @@ public class BuildManager : MonoBehaviour
     }
 
 
-    public void SlotClick(int _SlotNumber)
+    public void SlotClick(int _SlotNumber, float X)
     {
-        
-        PreviewPrefab = Instantiate(craft[_SlotNumber].previewCraft, MousePos, Quaternion.identity);
+        Vector3 mousePos = MousePos;
+        mousePos.y += X;
+        PreviewPrefab = Instantiate(craft[_SlotNumber].previewCraft, mousePos, Quaternion.identity);
         InsPrefab = craft[_SlotNumber].BuildCraft;
        
         isActivatePreview = true;

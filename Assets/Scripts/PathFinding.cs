@@ -39,6 +39,7 @@ public class PathFinding : MonoBehaviour
 
     private void Update()
     {
+        
         SetTarget();
     }
 
@@ -274,7 +275,7 @@ public class PathFinding : MonoBehaviour
                     Vector3 Dir = (currentWaypoint - this.transform.position).normalized;
                     ////  
                     this.transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
-
+                    
                     //Rb.velocity = Dir * 500 * Time.deltaTime;
                     yield return null;
                    // Debug.Log("Path.Lengh : " + Path.Length);
