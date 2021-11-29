@@ -7,7 +7,7 @@ public class MousePoint : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(this.gameObject);
+        Destroy(this.gameObject,0.01f);
     }
 
     // Update is called once per frame

@@ -43,12 +43,13 @@ public class Node
         }
     }
 
-    public Vector3 GetPos
+    public Vector3 GetPos(float Y,float cellcise)
     {
-        get
-        {
-            return new Vector3(GetX, 0, GetY);
-        }
+
+        float X = gridX * cellcise;
+        float Z = gridY * cellcise;
+            return new Vector3(gridX, Y, gridY);
+        
     }
 
  

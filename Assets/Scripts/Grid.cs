@@ -40,13 +40,13 @@ public class Grid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft+Vector3.right*(x+0.5f)+Vector3.forward*(y+0.5f);
                 grid[x, y] = new Node(true, x, y,this.transform);
-                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
-                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
+                //Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
+                //Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
                 //Debug.Log(GetWorldPosition(x,y));
             }
         }
-        Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width , height), Color.white, 100f);
-        Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
+        //Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width , height), Color.white, 100f);
+        //Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
     }
 
     private Vector3 GetWorldPosition(int x, int z)
@@ -71,15 +71,15 @@ public class Grid : MonoBehaviour
     
     public Vector3 ReturnPos(Node node,float cellsize)
     {
-        float X = node.GetX*cellsize;
-        float Z = node.GetY*cellsize;
+        float X = node.gridX*cellsize;
+        float Z = node.gridY*cellsize;
         return new Vector3(X, 0, Z);
     }
 
-    public void ObstacleNode(Vector3 Obstacle)
+    public void ObstacleNode(int x, int y)
     {
-        int x = (int)(Obstacle.x + width / 2);
-        int y = (int)(Obstacle.z + height / 2);
+        //int x = (int)(Obstacle.x + width / 2);
+        //int y = (int)(Obstacle.z + height / 2);
         grid[x, y].ChangeNode = false;
     }
 
